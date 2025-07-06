@@ -1,0 +1,20 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    # Analysis level (0 = permissive, max = strict)
+    level: max
+
+    # Where to look for code
+    paths:
+        - app
+        - routes
+        - database
+        - tests
+        - config
+
+    # Ignore these folders
+    excludePaths:
+        - vendor
+        - storage
+        - bootstrap
