@@ -32,8 +32,19 @@ class ImagePublisher
             $this->channel = $connection->channel();
         }
 
-        // Always declare queue
-        $this->channel->queue_declare($this->queue, false, true, false, false);
+        // Declare image-update queue with DLX config
+        $this->channel->queue_declare(
+            $this->queue,
+            false,
+            true,
+            false,
+            false,
+            false,
+            [
+                'x-dead-letter-exchange'    => ['S', ''],
+                'x-dead-letter-routing-key' => ['S', 'image-update-dead'],
+            ]
+        );
     }
 
     public function publish(array $payload): void
