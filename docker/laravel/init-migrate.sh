@@ -28,6 +28,9 @@ php artisan config:cache
 echo "🛠 Running migrations on primary..."
 php artisan migrate:fresh --force --database=sqlite
 
+echo "🔗 Creating storage symlink..."
+php artisan storage:link
+
 echo "🚀 Starting image consumer in background..."
 php artisan consume:image-download > storage/logs/image-consumer.log 2>&1 &
 
