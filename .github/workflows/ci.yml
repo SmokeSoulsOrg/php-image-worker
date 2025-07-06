@@ -7,68 +7,68 @@ on:
     branches: [main]
 
 jobs:
-#  laravel-tests:
-#    name: Laravel Tests
-#    runs-on: ubuntu-latest
-#    services:
-#      mysql:
-#        image: mysql:8.0
-#        env:
-#          MYSQL_ROOT_PASSWORD: root
-#          MYSQL_DATABASE: testing
-#        ports:
-#          - 3306:3306
-#        options: >-
-#          --health-cmd="mysqladmin ping --silent"
-#          --health-interval=10s
-#          --health-timeout=5s
-#          --health-retries=3
-#
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Set up PHP
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: 8.3
-#          extensions: mbstring, bcmath, mysql
-#          coverage: none
-#
-#      - name: Set up Composer dependencies
-#        run: composer install --prefer-dist --no-progress
-#
-#      - name: Copy .env
-#        run: cp .env.example .env
-#
-#      - name: Generate application key
-#        run: php artisan key:generate
-#
-#      - name: Wait for MySQL
-#        run: |
-#          until mysqladmin ping -h127.0.0.1 --silent; do
-#            echo "Waiting for MySQL..."
-#            sleep 1
-#          done
-#
-#      - name: Run migrations
-#        env:
-#          DB_CONNECTION: mysql
-#          DB_HOST: 127.0.0.1
-#          DB_PORT: 3306
-#          DB_DATABASE: testing
-#          DB_USERNAME: root
-#          DB_PASSWORD: root
-#        run: php artisan migrate --force
-#
-#      - name: Run tests
-#        env:
-#          DB_CONNECTION: mysql
-#          DB_HOST: 127.0.0.1
-#          DB_PORT: 3306
-#          DB_DATABASE: testing
-#          DB_USERNAME: root
-#          DB_PASSWORD: root
-#        run: php artisan test
+  laravel-tests:
+    name: Laravel Tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, bcmath, mysql
+          coverage: none
+
+      - name: Set up Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h127.0.0.1 --silent; do
+            echo "Waiting for MySQL..."
+            sleep 1
+          done
+
+      - name: Run migrations
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: root
+          DB_PASSWORD: root
+        run: php artisan migrate --force
+
+      - name: Run tests
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: root
+          DB_PASSWORD: root
+        run: php artisan test
 
   code-quality:
     name: Code Quality Checks
@@ -128,7 +128,7 @@ jobs:
     name: Build and Push Laravel Docker Image
     runs-on: ubuntu-latest
     #    needs: [laravel-tests, code-quality] ignore code-quality because I won't have time to fix them all
-#    needs: laravel-tests
+    needs: laravel-tests
     if: success()
 
     permissions:
