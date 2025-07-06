@@ -42,6 +42,7 @@ class DownloadAndPublishImage implements ShouldQueue
 
             app(ImagePublisher::class)->publish([
                 'url' => $url,
+                'type' => $this->payload['type'] ?? null,
                 'local_path' => "storage/{$relativePath}",
             ]);
 
@@ -49,6 +50,7 @@ class DownloadAndPublishImage implements ShouldQueue
         } catch (\Throwable $e) {
             Log::error('[Download] Failed', [
                 'url' => $url,
+                'type' => $this->payload['type'] ?? null,
                 'error' => $e->getMessage()
             ]);
         }
