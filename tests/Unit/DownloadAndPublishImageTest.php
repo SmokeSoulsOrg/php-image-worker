@@ -63,7 +63,7 @@ class DownloadAndPublishImageTest extends TestCase
 
     public function test_it_downloads_and_dispatches_image_publish(): void
     {
-        Storage::fake('local');
+        Storage::fake('public');
 
         $url = 'https://fake.test/image.jpg';
         $imageContent = 'fake image content';
@@ -89,12 +89,14 @@ class DownloadAndPublishImageTest extends TestCase
         $job = new DownloadAndPublishImage(['url' => $url]);
         $job->handle();
 
-        $expectedFilename = 'storage/pornstar-images/' . md5($url) . '.jpg';
-        Storage::disk('public')->assertExists($expectedFilename);
+        $filename = md5($url) . '.jpg';
+        $relativePath = "pornstar-images/{$filename}";
+
+        Storage::disk('public')->assertExists($relativePath);
 
         $logSpy->shouldHaveReceived('info')
-            ->withArgs(function ($message) use ($expectedFilename) {
-                return str_contains($message, $expectedFilename);
+            ->withArgs(function ($message) use ($filename) {
+                return str_contains($message, "storage/pornstar-images/{$filename}");
             });
     }
 }
