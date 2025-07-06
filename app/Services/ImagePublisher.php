@@ -15,18 +15,24 @@ class ImagePublisher
     /**
      * @throws Exception
      */
-    public function __construct()
+    public function __construct(AMQPChannel $channel = null)
     {
-        $connection = new AMQPStreamConnection(
-            config('services.rabbitmq.host'),
-            config('services.rabbitmq.port'),
-            config('services.rabbitmq.user'),
-            config('services.rabbitmq.password')
-        );
-
-        $this->channel = $connection->channel();
         $this->queue = config('services.rabbitmq.image_update_queue', 'image-update');
 
+        if ($channel) {
+            $this->channel = $channel;
+        } else {
+            $connection = new AMQPStreamConnection(
+                config('services.rabbitmq.host'),
+                config('services.rabbitmq.port'),
+                config('services.rabbitmq.user'),
+                config('services.rabbitmq.password')
+            );
+
+            $this->channel = $connection->channel();
+        }
+
+        // Always declare queue
         $this->channel->queue_declare($this->queue, false, true, false, false);
     }
 

@@ -31,5 +31,8 @@ php artisan migrate:fresh --force --database=sqlite
 echo "🚀 Starting image consumer in background..."
 php artisan consume:image-download > storage/logs/image-consumer.log 2>&1 &
 
+echo "🚀 Starting Laravel queue worker for image-events..."
+php artisan queue:work rabbitmq --queue=image-events > storage/logs/image-worker.log 2>&1 &
+
 echo "✅ Done. Tailing application logs using Pail..."
 php artisan pail

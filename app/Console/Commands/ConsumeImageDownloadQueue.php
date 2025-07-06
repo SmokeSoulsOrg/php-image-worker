@@ -40,7 +40,7 @@ class ConsumeImageDownloadQueue extends Command
                 return;
             }
 
-            dispatch((new DownloadAndPublishImage($payload))->onQueue('ingest-images'));
+            dispatch((new DownloadAndPublishImage($payload))->onQueue('image-events'));
 
             $msg->ack();
         };
