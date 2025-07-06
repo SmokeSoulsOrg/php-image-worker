@@ -77,7 +77,7 @@ class DownloadAndPublishImageTest extends TestCase
         $publisher->shouldReceive('publish')
             ->once()
             ->with(Mockery::on(function ($payload) use ($url) {
-                return Str::startsWith($payload['local_path'], 'pornstar-images/')
+                return Str::startsWith($payload['local_path'], 'storage/pornstar-images/')
                     && $payload['url'] === $url;
             }));
         $this->app->instance(ImagePublisher::class, $publisher);
@@ -89,7 +89,7 @@ class DownloadAndPublishImageTest extends TestCase
         $job = new DownloadAndPublishImage(['url' => $url]);
         $job->handle();
 
-        $expectedFilename = 'pornstar-images/' . md5($url) . '.jpg';
+        $expectedFilename = 'storage/pornstar-images/' . md5($url) . '.jpg';
         Storage::disk('public')->assertExists($expectedFilename);
 
         $logSpy->shouldHaveReceived('info')
