@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client \
     && pecl install redis \
     && docker-php-ext-enable redis \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd sockets \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd sockets
 
 # Avoid Git "dubious ownership" errors inside container
 RUN git config --global --add safe.directory /var/www/html
