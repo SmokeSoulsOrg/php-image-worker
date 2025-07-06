@@ -45,7 +45,7 @@ class DownloadAndPublishImage implements ShouldQueue
                 'local_path' => "storage/{$relativePath}",
             ]);
 
-            Log::info("[Download] Image downloaded and published: {$relativePath}");
+            Log::info("[Download] Image downloaded and published: storage/{$relativePath}");
         } catch (\Throwable $e) {
             Log::error('[Download] Failed', [
                 'url' => $url,

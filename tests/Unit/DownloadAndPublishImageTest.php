@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Jobs\DownloadAndPublishImage;
 use App\Services\ImagePublisher;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Mockery;
@@ -24,7 +25,7 @@ class DownloadAndPublishImageTest extends TestCase
     {
         /** @var MockInterface|LoggerInterface $logSpy */
         $logSpy = Mockery::spy(LoggerInterface::class);
-        $this->app->instance('log', $logSpy);
+        Log::swap($logSpy); // ✅ Ensure facade calls are intercepted
 
         $job = new DownloadAndPublishImage(['type' => 'main']);
         $job->handle();
@@ -36,14 +37,14 @@ class DownloadAndPublishImageTest extends TestCase
                     && array_key_exists('payload', $context);
             });
 
-        $this->assertTrue(true); // ✅ Prevents "risky" warning
+        $this->assertTrue(true); // ✅ Prevents risky test warning
     }
 
     public function test_it_logs_error_on_failed_http_request(): void
     {
         /** @var MockInterface|LoggerInterface $logSpy */
         $logSpy = Mockery::spy(LoggerInterface::class);
-        $this->app->instance('log', $logSpy);
+        Log::swap($logSpy);
 
         Http::fake([
             '*' => Http::response('Not Found', 404),
@@ -58,7 +59,7 @@ class DownloadAndPublishImageTest extends TestCase
                     && isset($context['url'], $context['error']);
             });
 
-        $this->assertTrue(true); // ✅ Prevents PHPUnit from marking it risky
+        $this->assertTrue(true); // ✅ Prevents risky test warning
     }
 
     public function test_it_downloads_and_dispatches_image_publish(): void
@@ -84,7 +85,7 @@ class DownloadAndPublishImageTest extends TestCase
 
         /** @var MockInterface|LoggerInterface $logSpy */
         $logSpy = Mockery::spy(LoggerInterface::class);
-        $this->app->instance('log', $logSpy);
+        Log::swap($logSpy);
 
         $job = new DownloadAndPublishImage(['url' => $url]);
         $job->handle();
