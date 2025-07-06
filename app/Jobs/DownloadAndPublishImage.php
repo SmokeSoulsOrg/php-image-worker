@@ -36,16 +36,16 @@ class DownloadAndPublishImage implements ShouldQueue
             }
 
             $filename = md5($url) . '.' . pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
-            $path = 'pornstar-images/' . $filename;
+            $relativePath = "pornstar-images/{$filename}";
 
-            Storage::disk('public')->put($path, $response->body());
+            Storage::disk('public')->put($relativePath, $response->body());
 
             app(ImagePublisher::class)->publish([
                 'url' => $url,
-                'local_path' => $path,
+                'local_path' => "storage/{$relativePath}",
             ]);
 
-            Log::info("[Download] Image downloaded and published: {$path}");
+            Log::info("[Download] Image downloaded and published: {$relativePath}");
         } catch (\Throwable $e) {
             Log::error('[Download] Failed', [
                 'url' => $url,
