@@ -31,6 +31,13 @@ php artisan migrate:fresh --force --database=sqlite
 echo "🔗 Creating storage symlink..."
 php artisan storage:link || echo "⚠️  storage:link failed (probably already linked)"
 
+echo "⏳ Waiting for RabbitMQ..."
+until nc -z rabbitmq 5672; do
+  echo "🔁 Waiting for rabbitmq..."
+  sleep 1
+done
+echo "✅ RabbitMQ is ready."
+
 echo "🚀 Starting image consumer in background..."
 php artisan consume:image-download > storage/logs/image-consumer.log 2>&1 &
 
