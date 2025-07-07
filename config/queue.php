@@ -34,6 +34,14 @@ return [
             'driver' => 'sync',
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'host' => env('RABBITMQ_HOST', '127.0.0.1'),
+            'port' => env('RABBITMQ_PORT', 5672),
+            'username' => env('RABBITMQ_USER', 'guest'),
+            'queue' => env('RABBITMQ_QUEUE', 'image-events'),
+        ],
+
         'database' => [
             'driver' => 'database',
             'connection' => env('DB_QUEUE_CONNECTION'),
