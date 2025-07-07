@@ -40,6 +40,7 @@ return [
             'port' => env('RABBITMQ_PORT', 5672),
             'username' => env('RABBITMQ_USER', 'guest'),
             'queue' => env('RABBITMQ_QUEUE', 'image-events'),
+            'declare_queues' => true,
         ],
 
         'database' => [
