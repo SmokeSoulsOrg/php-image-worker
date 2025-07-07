@@ -29,13 +29,13 @@ echo "🛠 Running migrations on primary..."
 php artisan migrate:fresh --force --database=sqlite
 
 echo "🔗 Creating storage symlink..."
-php artisan storage:link
+php artisan storage:link || echo "⚠️  storage:link failed (probably already linked)"
 
 echo "🚀 Starting image consumer in background..."
 php artisan consume:image-download > storage/logs/image-consumer.log 2>&1 &
 
-echo "🛠 Running RabbitMQ queues in background..."
-php artisan queue:work rabbitmq
+echo "🚀 Starting Laravel queue worker for image-events..."
+php artisan queue:work rabbitmq > storage/logs/image-worker.log 2>&1 &
 
 echo "✅ Done. Tailing application logs using Pail..."
 php artisan pail
